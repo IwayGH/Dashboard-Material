@@ -1,0 +1,12 @@
+# Python
+__pycache__/
+*.pyc
+backend/__pycache__/
+
+# Database
+*.db
+dashboard_material.db
+
+# Environment
+venv/
+env/

@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}Approval Request{% endblock %}
+{% block page_title %}Approval Material Request{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-white py-3">
+        <h6 class="m-0 font-weight-bold text-primary">List Permintaan Material Pending</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>#ID</th>
+                        <th>Material</th>
+                        <th>Region</th>
+                        <th class="text-center">Qty</th>
+                        <th class="text-center">Status</th>
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for r in reqs %}
+                    <tr>
+                        <td>{{ r.id }}</td>
+                        <td><code>{{ r.code }}</code> - {{ r.name }}</td>
+                        <td>{{ r.region }}</td>
+                        <td class="text-center fw-bold">{{ r.quantity }}</td>
+                        <td class="text-center"><span class="badge bg-warning text-dark">Pending</span></td>
+                        <td class="text-center">
+                            <a href="{{ url_for('main.approve', req_id=r.id) }}" class="btn btn-success btn-sm">
+                                <i class="bi bi-check-lg"></i> Approve
+                            </a>
+                            <a href="{{ url_for('main.reject', req_id=r.id) }}" class="btn btn-danger btn-sm">
+                                <i class="bi bi-x-lg"></i> Reject
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Tidak ada request pending saat ini.</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,140 @@
+{% extends 'base.html' %}
+{% block title %}Repair Form{% endblock %}
+{% block page_title %}{{ 'Edit' if log else 'Add' }} Repair Log{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 font-weight-bold text-primary">{{ mat.code }} - {{ mat.name }}</h6>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    
+                    <!-- 1. Delivery Out -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-primary border-bottom pb-2">Delivery Out</h6>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Tanggal</label>
+                            <input type="date" name="delivery_date" value="{{ log.delivery_date if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor DN</label>
+                            <input type="text" name="delivery_dn" value="{{ log.delivery_dn if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor Seri Perangkat</label>
+                            <input type="text" name="delivery_serial" value="{{ log.delivery_serial if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Status</label>
+                            <select name="delivery_status" class="form-select">
+                                <option value="">Pilih Status...</option>
+                                <option value="Initialize" {% if log and log.delivery_status == 'Initialize' %}selected{% endif %}>Initialize</option>
+                                <option value="On Progress" {% if log and log.delivery_status == 'On Progress' %}selected{% endif %}>On Progress</option>
+                                <option value="Done" {% if log and log.delivery_status == 'Done' %}selected{% endif %}>Done</option>
+                                <option value="Failed" {% if log and log.delivery_status == 'Failed' %}selected{% endif %}>Failed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 2. Repair Status -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-success border-bottom pb-2">Repair Status</h6>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Tanggal</label>
+                            <input type="date" name="inbound_date" value="{{ log.inbound_date if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor DN</label>
+                            <input type="text" name="inbound_dn" value="{{ log.inbound_dn if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor Seri Perangkat</label>
+                            <input type="text" name="inbound_serial" value="{{ log.inbound_serial if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Status</label>
+                            <select name="inbound_status" class="form-select">
+                                <option value="">Pilih Status...</option>
+                                <option value="Initialize" {% if log and log.inbound_status == 'Initialize' %}selected{% endif %}>Initialize</option>
+                                <option value="On Progress" {% if log and log.inbound_status == 'On Progress' %}selected{% endif %}>On Progress</option>
+                                <option value="Done" {% if log and log.inbound_status == 'Done' %}selected{% endif %}>Done</option>
+                                <option value="Failed" {% if log and log.inbound_status == 'Failed' %}selected{% endif %}>Failed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 3. Delivery In -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-info border-bottom pb-2">Delivery In</h6>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Tanggal</label>
+                            <input type="date" name="outbound_date" value="{{ log.outbound_date if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor DN</label>
+                            <input type="text" name="outbound_dn" value="{{ log.outbound_dn if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor Seri Perangkat</label>
+                            <input type="text" name="outbound_serial" value="{{ log.outbound_serial if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Status</label>
+                            <select name="outbound_status" class="form-select">
+                                <option value="">Pilih Status...</option>
+                                <option value="Initialize" {% if log and log.outbound_status == 'Initialize' %}selected{% endif %}>Initialize</option>
+                                <option value="On Progress" {% if log and log.outbound_status == 'On Progress' %}selected{% endif %}>On Progress</option>
+                                <option value="Done" {% if log and log.outbound_status == 'Done' %}selected{% endif %}>Done</option>
+                                <option value="Failed" {% if log and log.outbound_status == 'Failed' %}selected{% endif %}>Failed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- 4. Inbound -->
+                    <div class="row mb-4">
+                        <div class="col-12">
+                            <h6 class="text-warning border-bottom pb-2">Inbound</h6>
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Tanggal</label>
+                            <input type="date" name="repair_date" value="{{ log.repair_date if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor DN</label>
+                            <input type="text" name="repair_dn" value="{{ log.repair_dn if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Nomor Seri Perangkat</label>
+                            <input type="text" name="repair_serial" value="{{ log.repair_serial if log else '' }}" class="form-control">
+                        </div>
+                        <div class="col-md-3 mb-2">
+                            <label class="form-label small">Status</label>
+                            <select name="repair_status" class="form-select">
+                                <option value="">Pilih Status...</option>
+                                <option value="Initialize" {% if log and log.repair_status == 'Initialize' %}selected{% endif %}>Initialize</option>
+                                <option value="On Progress" {% if log and log.repair_status == 'On Progress' %}selected{% endif %}>On Progress</option>
+                                <option value="Done" {% if log and log.repair_status == 'Done' %}selected{% endif %}>Done</option>
+                                <option value="Failed" {% if log and log.repair_status == 'Failed' %}selected{% endif %}>Failed</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+                        <a href="{{ url_for('main.repair_logs', mat_id=mat.id) }}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Log</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

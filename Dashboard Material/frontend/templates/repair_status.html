@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Repair Status{% endblock %}
+{% block page_title %}Material Repair Status{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-white py-3">
+        <h6 class="m-0 font-weight-bold text-primary">Daftar Material Untuk Repair</h6>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Vendor</th>
+                        <th class="text-center">Latest Status</th> <!-- KOLOM BARU -->
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in mats %}
+                    <tr>
+                        <td><code class="text-primary fw-bold">{{ m.code }}</code></td>
+                        <td>{{ m.name }}</td>
+                        <td><span class="badge bg-info text-dark">{{ m.type }}</span></td>
+                        <td>{{ m.vendor }}</td>
+                        <td class="text-center">
+                            {% if m.latest_status == 'Done' %}
+                                <span class="badge bg-success">Done</span>
+                            {% elif m.latest_status == 'On Progress' %}
+                                <span class="badge bg-primary">On Progress</span>
+                            {% elif m.latest_status == 'Initialize' %}
+                                <span class="badge bg-warning text-dark">Initialize</span>
+                            {% elif m.latest_status == 'Failed' %}
+                                <span class="badge bg-danger">Failed</span>
+                            {% else %}
+                                <span class="badge bg-secondary">No Status</span>
+                            {% endif %}
+                        </td>
+                        <td class="text-center">
+                            <a href="{{ url_for('main.repair_logs', mat_id=m.id) }}" class="btn btn-info btn-sm">
+                                <i class="bi bi-tools"></i> View / Add Logs
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="6" class="text-center text-muted py-4">Tidak ada data material yang memiliki repair log.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

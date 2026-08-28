@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% block title %}Manage Accounts{% endblock %}
+{% block page_title %}User Management{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Form Tambah Akun -->
+    <div class="col-lg-4 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 font-weight-bold text-primary"><i class="bi bi-person-plus"></i> Tambah Akun Baru</h6>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label small">Username</label>
+                        <input type="text" name="username" class="form-control" placeholder="Masukkan username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Password</label>
+                        <input type="text" name="password" class="form-control" placeholder="Masukkan password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="Superuser">Superuser</option>
+                            <option value="Jakarta">Jakarta (Full Access)</option>
+                            <option value="Regional">Regional (Edit Stock Only)</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label small">Region</label>
+                        <select name="region" class="form-select">
+                            {% for r in regions %}
+                            <option value="{{ r }}">{{ r }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100"><i class="bi bi-save"></i> Save Account</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabel Daftar Akun -->
+    <div class="col-lg-8 mb-4">
+        <div class="card shadow">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 font-weight-bold text-primary"><i class="bi bi-list-check"></i> Daftar Pengguna</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Region</th>
+                                <th class="text-center">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for u in users %}
+                            <tr>
+                                <td>{{ u.id }}</td>
+                                <td class="fw-bold">{{ u.username }}</td>
+                                <td>
+                                    {% if u.role == 'Superuser' or u.role == 'Jakarta' %}
+                                    <span class="badge bg-danger">{{ u.role }}</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ u.role }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ u.region }}</td>
+                                <td class="text-center">
+                                    <a href="{{ url_for('main.edit_account', user_id=u.id) }}" class="btn btn-primary btn-sm">
+                                        <i class="bi bi-pencil-square"></i> Edit
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

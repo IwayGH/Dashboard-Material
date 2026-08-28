@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Edit Material{% endblock %}
+{% block page_title %}Edit Material Numbers{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Update Data: {{ mat.code }}</h6>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-secondary">
+                    <strong>Name:</strong> {{ mat.name }}<br>
+                    <strong>Type:</strong> {{ mat.type }} | <strong>Vendor:</strong> {{ mat.vendor }}
+                </div>
+                <form method="post">
+                    <div class="row">
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Material Baru</label>
+                            <input type="number" name="material_baru" value="{{ mat.material_baru }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">After Repair</label>
+                            <input type="number" name="after_repair" value="{{ mat.after_repair }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Spare</label>
+                            <input type="number" name="spare" value="{{ mat.spare }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Used (Dipakai)</label>
+                            <input type="number" name="used" value="{{ mat.used }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Faulty</label>
+                            <input type="number" name="faulty" value="{{ mat.faulty }}" class="form-control" required>
+                        </div>
+                        <div class="col-md-3 mb-3">
+                            <label class="form-label">Licensed</label>
+                            <input type="number" name="licensed" value="{{ mat.licensed }}" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Remark (Catatan)</label>
+                        <textarea name="remark" class="form-control" rows="3" placeholder="Masukkan catatan terkait material ini...">{{ mat.remark if mat.remark else '' }}</textarea>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('main.materials') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

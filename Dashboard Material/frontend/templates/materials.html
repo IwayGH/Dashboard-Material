@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}List Material{% endblock %}
+{% block page_title %}List Material & Stock{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <h6 class="m-0 font-weight-bold text-primary">Data Material</h6>
+        <input type="text" id="searchInput" class="form-control form-control-sm w-25" placeholder="Cari material...">
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-hover align-middle" id="materialsTable">
+                <thead>
+                    <tr>
+                        <th>Code</th>
+                        <th>Name</th>
+                        <th>Type</th>
+                        <th>Vendor</th>
+                        <th class="text-center">Spare</th>
+                        <th class="text-center">Used</th>
+                        <th class="text-center">Faulty</th>
+                        <th class="text-center">Licensed</th>
+                        <th>Remark</th>
+                        {% if role not in ['Superuser', 'Jakarta'] %}
+                        <th class="text-center">Stock {{ region }}</th>
+                        {% endif %}
+                        <th class="text-center">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for m in mats %}
+                    <tr>
+                        <td><code class="text-primary fw-bold">{{ m.code }}</code></td>
+                        <td>{{ m.name }}</td>
+                        <td><span class="badge bg-info text-dark">{{ m.type }}</span></td>
+                        <td>{{ m.vendor }}</td>
+                        <td class="text-center">{{ m.spare }}</td>
+                        <td class="text-center">{{ m.used }}</td>
+                        <td class="text-center text-danger">{{ m.faulty }}</td>
+                        <td class="text-center text-warning">{{ m.licensed }}</td>
+                        <td>{{ m.remark or '-' }}</td>
+                        
+                        {% if role not in ['Superuser', 'Jakarta'] %}
+                        <td class="text-center fw-bold">{{ m.regional_stock }}</td>
+                        <td class="text-center">
+                            <a href="{{ url_for('main.edit_stock', mat_id=m.id) }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Edit Stock
+                            </a>
+                        </td>
+                        {% else %}
+                        <td class="text-center">
+                            <a href="{{ url_for('main.edit_material', mat_id=m.id) }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil-square"></i> Edit Numbers
+                            </a>
+                        </td>
+                        {% endif %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+{% block scripts %}
+<script>
+    document.getElementById('searchInput').addEventListener('keyup', function() {
+        let filter = this.value.toLowerCase();
+        let rows = document.querySelectorAll('#materialsTable tbody tr');
+        rows.forEach(row => {
+            let text = row.textContent.toLowerCase();
+            if(text.includes(filter)) {
+                row.style.display = '';
+            } else {
+                row.style.display = 'none';
+            }
+        });
+    });
+</script>
+{% endblock %}
+{% endblock %}

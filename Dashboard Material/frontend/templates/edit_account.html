@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block title %}Edit Account{% endblock %}
+{% block page_title %}Edit User Account{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-6">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white py-3">
+                <h6 class="m-0 font-weight-bold text-primary">Update Data: {{ user.username }}</h6>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Username</label>
+                        <input type="text" name="username" value="{{ user.username }}" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Password</label>
+                        <input type="text" name="password" value="{{ user.password }}" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Role</label>
+                        <select name="role" class="form-select">
+                            <option value="Superuser" {% if user.role == 'Superuser' %}selected{% endif %}>Superuser</option>
+                            <option value="Jakarta" {% if user.role == 'Jakarta' %}selected{% endif %}>Jakarta (Full Access)</option>
+                            <option value="Regional" {% if user.role == 'Regional' %}selected{% endif %}>Regional (Edit Stock Only)</option>
+                        </select>
+                    </div>
+                    <div class="mb-4">
+                        <label class="form-label">Region</label>
+                        <select name="region" class="form-select">
+                            {% for r in regions %}<option value="{{ r }}" {% if user.region == r %}selected{% endif %}>{{ r }}</option>{% endfor %}
+                        </select>
+                    </div>
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="{{ url_for('main.accounts') }}" class="btn btn-secondary me-md-2">Cancel</a>
+                        <button type="submit" class="btn btn-primary"><i class="bi bi-save"></i> Save Changes</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

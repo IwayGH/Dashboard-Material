@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block page_title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-start-primary">
+            <div class="stat-card-body">
+                <div>
+                    <div class="text-primary fw-bold mb-1">Material Spare</div>
+                    <div class="h3 mb-0 fw-bold text-gray-800">{{ stats.spare or 0 }}</div>
+                </div>
+                <div class="stat-icon text-primary"><i class="bi bi-box2-heart"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-start-success">
+            <div class="stat-card-body">
+                <div>
+                    <div class="text-success fw-bold mb-1">Material Dipakai</div>
+                    <div class="h3 mb-0 fw-bold text-gray-800">{{ stats.used or 0 }}</div>
+                </div>
+                <div class="stat-icon text-success"><i class="bi bi-box2-check"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-start-danger">
+            <div class="stat-card-body">
+                <div>
+                    <div class="text-danger fw-bold mb-1">Material Faulty</div>
+                    <div class="h3 mb-0 fw-bold text-gray-800">{{ stats.faulty or 0 }}</div>
+                </div>
+                <div class="stat-icon text-danger"><i class="bi bi-exclamation-triangle"></i></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-xl-3 col-md-6 mb-4">
+        <div class="card stat-card border-start-warning">
+            <div class="stat-card-body">
+                <div>
+                    <div class="text-warning fw-bold mb-1">Material Licensed</div>
+                    <div class="h3 mb-0 fw-bold text-gray-800">{{ stats.licensed or 0 }}</div>
+                </div>
+                <div class="stat-icon text-warning"><i class="bi bi-award"></i></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% if role == 'Jakarta' or role == 'Superuser' %}
+<!-- DASHBOARD MATERIAL REPAIR STATUS -->
+<div class="row mb-4">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Material Repair Status</h6>
+                <a href="{{ url_for('main.repair_status') }}" class="btn btn-sm btn-outline-primary">Lihat Semua Material</a>
+            </div>
+            <div class="card-body">
+                <div class="row text-center">
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-warning h-100 py-2">
+                            <div class="card-body">
+                                <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">Initialize</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ repair_stats.initialize if repair_stats else 0 }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-primary h-100 py-2">
+                            <div class="card-body">
+                                <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">On Progress</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ repair_stats.on_progress if repair_stats else 0 }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-success h-100 py-2">
+                            <div class="card-body">
+                                <div class="text-xs font-weight-bold text-success text-uppercase mb-1">Done</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ repair_stats.done if repair_stats else 0 }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <div class="card border-left-danger h-100 py-2">
+                            <div class="card-body">
+                                <div class="text-xs font-weight-bold text-danger text-uppercase mb-1">Failed</div>
+                                <div class="h5 mb-0 font-weight-bold text-gray-800">{{ repair_stats.failed if repair_stats else 0 }}</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+{% if role == 'Jakarta' or role == 'Superuser' %}
+<div class="row">
+    <div class="col-12">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                <h6 class="m-0 font-weight-bold text-primary">Stock Summary Per Regional</h6>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table align-middle">
+                        <thead>
+                            <tr>
+                                <th>Region</th>
+                                <th>Total Stock</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for rs in reg_stats %}
+                            <tr>
+                                <td class="fw-bold">{{ rs.region }}</td>
+                                <td>{{ rs.total }}</td>
+                                <td>
+<a href="{{ url_for('main.regional_detail', region=rs.region) }}" class="text-decoration-none">
+    {% if rs.total > 0 %}
+    <span class="badge bg-success">Tersedia</span>
+    {% else %}
+    <span class="badge bg-danger">Kosong</span>
+    {% endif %}
+</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}

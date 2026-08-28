@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Dashboard Material{% endblock %}</title>
+    <!-- Bootstrap 5 -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="{{ url_for('static', filename='style.css') }}" rel="stylesheet">
+</head>
+<body>
+
+{% if session.get('user_id') %}
+<div class="wrapper">
+    <!-- Sidebar -->
+    <nav id="sidebar">
+        <div class="sidebar-header">
+            <i class="bi bi-box-seam-fill"></i> Material App
+        </div>
+        <ul class="components">
+            <li>
+                <a href="{{ url_for('main.dashboard') }}" class="{% if request.endpoint == 'main.dashboard' %}active{% endif %}">
+                    <i class="bi bi-speedometer2 me-2"></i> Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main.materials') }}" class="{% if request.endpoint == 'main.materials' %}active{% endif %}">
+                    <i class="bi bi-list-ul me-2"></i> List Material
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main.repair_status') }}" class="{% if request.endpoint == 'main.repair_status' %}active{% endif %}">
+                    <i class="bi bi-tools me-2"></i> Repair Status
+                </a>
+            </li>
+            {% if role == 'Jakarta' or role == 'Superuser' %}
+            <li>
+                <a href="{{ url_for('main.approvals') }}" class="{% if request.endpoint == 'main.approvals' %}active{% endif %}">
+                    <i class="bi bi-clipboard-check me-2"></i> Approval Request
+                </a>
+            </li>
+            <li>
+                <a href="{{ url_for('main.accounts') }}" class="{% if request.endpoint == 'main.accounts' %}active{% endif %}">
+                    <i class="bi bi-people me-2"></i> Manage Accounts
+                </a>
+            </li>
+            {% else %}
+            <li>
+                <a href="{{ url_for('main.request_material') }}" class="{% if request.endpoint == 'main.request_material' %}active{% endif %}">
+                    <i class="bi bi-plus-circle me-2"></i> Request Material
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <!-- Page Content -->
+    <div id="content">
+        <nav class="topbar">
+            <h5 class="m-0 font-weight-bold text-primary">{% block page_title %}{% endblock %}</h5>
+            <div class="dropdown">
+                <span class="me-3 text-muted">
+                    <i class="bi bi-person-circle"></i> {{ session.get('username') }} 
+                    <span class="badge bg-secondary">{{ session.get('role') }} - {{ session.get('region') }}</span>
+                </span>
+                <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm">
+                    <i class="bi bi-box-arrow-right"></i> Logout
+                </a>
+            </div>
+        </nav>
+
+        <div class="container-fluid p-4">
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+</div>
+{% else %}
+    <!-- Halaman Login Tanpa Sidebar -->
+    {% block login_content %}{% endblock %}
+{% endif %}
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+{% block scripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,99 @@
+{% extends 'base.html' %}
+{% block title %}Repair Logs{% endblock %}
+{% block page_title %}Repair Status Material{% endblock %}
+
+{% block content %}
+<div class="card shadow mb-4">
+    <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+        <div>
+            <h6 class="m-0 font-weight-bold text-primary">{{ mat.code }} - {{ mat.name }}</h6>
+            <small class="text-muted">{{ mat.type }} | {{ mat.vendor }}</small>
+        </div>
+        <div>
+            <a href="{{ url_for('main.add_repair', mat_id=mat.id) }}" class="btn btn-primary btn-sm">
+                <i class="bi bi-plus-circle"></i> Add Repair Log
+            </a>
+            <a href="{{ url_for('main.materials') }}" class="btn btn-secondary btn-sm">
+                <i class="bi bi-arrow-left"></i> Back
+            </a>
+        </div>
+    </div>
+    <div class="card-body">
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover align-middle">
+                <thead class="table-light">
+                    <tr>
+                        <th rowspan="2" class="align-middle text-center">ID</th>
+                        <th colspan="4" class="text-center bg-light">Delivery Out</th>
+                        <th colspan="4" class="text-center bg-light">Repair Status</th>
+                        <th colspan="4" class="text-center bg-light">Delivery In</th>
+                        <th colspan="4" class="text-center bg-light">Inbound</th>
+                        <th rowspan="2" class="align-middle text-center">Action</th>
+                    </tr>
+                    <tr>
+                        <th>Date</th><th>DN No</th><th>Serial</th><th>Status</th>
+                        <th>Date</th><th>DN No</th><th>Serial</th><th>Status</th>
+                        <th>Date</th><th>DN No</th><th>Serial</th><th>Status</th>
+                        <th>Date</th><th>DN No</th><th>Serial</th><th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for log in logs %}
+                    <tr>
+                        <td class="text-center">{{ log.id }}</td>
+                        
+                        <!-- Delivery Out -->
+                        <td>{{ log.delivery_date or '-' }}</td><td>{{ log.delivery_dn or '-' }}</td><td>{{ log.delivery_serial or '-' }}</td>
+                        <td class="text-center">
+                            {% if log.delivery_status == 'Done' %}<span class="badge bg-success">Done</span>
+                            {% elif log.delivery_status == 'On Progress' %}<span class="badge bg-primary">On Progress</span>
+                            {% elif log.delivery_status == 'Initialize' %}<span class="badge bg-warning text-dark">Initialize</span>
+                            {% elif log.delivery_status == 'Failed' %}<span class="badge bg-danger">Failed</span>
+                            {% else %} <span class="badge bg-secondary">No Status</span> {% endif %}
+                        </td>
+                        
+                        <!-- Repair Status -->
+                        <td>{{ log.inbound_date or '-' }}</td><td>{{ log.inbound_dn or '-' }}</td><td>{{ log.inbound_serial or '-' }}</td>
+                        <td class="text-center">
+                            {% if log.inbound_status == 'Done' %}<span class="badge bg-success">Done</span>
+                            {% elif log.inbound_status == 'On Progress' %}<span class="badge bg-primary">On Progress</span>
+                            {% elif log.inbound_status == 'Initialize' %}<span class="badge bg-warning text-dark">Initialize</span>
+                            {% elif log.inbound_status == 'Failed' %}<span class="badge bg-danger">Failed</span>
+                            {% else %} <span class="badge bg-secondary">No Status</span> {% endif %}
+                        </td>
+                        
+                        <!-- Delivery In -->
+                        <td>{{ log.outbound_date or '-' }}</td><td>{{ log.outbound_dn or '-' }}</td><td>{{ log.outbound_serial or '-' }}</td>
+                        <td class="text-center">
+                            {% if log.outbound_status == 'Done' %}<span class="badge bg-success">Done</span>
+                            {% elif log.outbound_status == 'On Progress' %}<span class="badge bg-primary">On Progress</span>
+                            {% elif log.outbound_status == 'Initialize' %}<span class="badge bg-warning text-dark">Initialize</span>
+                            {% elif log.outbound_status == 'Failed' %}<span class="badge bg-danger">Failed</span>
+                            {% else %} <span class="badge bg-secondary">No Status</span> {% endif %}
+                        </td>
+                        
+                        <!-- Inbound -->
+                        <td>{{ log.repair_date or '-' }}</td><td>{{ log.repair_dn or '-' }}</td><td>{{ log.repair_serial or '-' }}</td>
+                        <td class="text-center">
+                            {% if log.repair_status == 'Done' %}<span class="badge bg-success">Done</span>
+                            {% elif log.repair_status == 'On Progress' %}<span class="badge bg-primary">On Progress</span>
+                            {% elif log.repair_status == 'Initialize' %}<span class="badge bg-warning text-dark">Initialize</span>
+                            {% elif log.repair_status == 'Failed' %}<span class="badge bg-danger">Failed</span>
+                            {% else %} <span class="badge bg-secondary">No Status</span> {% endif %}
+                        </td>
+                        
+                        <td class="text-center">
+                            <a href="{{ url_for('main.edit_repair', repair_id=log.id) }}" class="btn btn-warning btn-sm">
+                                <i class="bi bi-pencil"></i>
+                            </a>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr><td colspan="18" class="text-center text-muted py-4">Belum ada data repair untuk material ini.</td></tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
